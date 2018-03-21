@@ -7,35 +7,26 @@
 
 using namespace std;
 
-
-class Vertex {
-	public:
-		int id, SCC_id;
-		int d = -1; //Base comparition values (since d,low >= 0)
-		int low = -1;
-		bool is_on_stack = false;
-
-		Vertex(int id);
-
-
-};
-
-
-Vertex::Vertex(int id) {
-	id = id;
-
-}
-
 class Graph {
 	public:
 		int V;
 		int E; //TODO might not need this in implementation
 		//list<int> *adj_list;
-		vector< list<Vertex> > adj_list;
-		stack <Vertex> L;
+		vector< list<int> > adj_list;
+
+		vector<int> low;
+		vector<int> d;
+		vector<int> vertex_info; //TODO make linear search for less memory?
+		//vertex_info is:
+		//  -2 if vertex isn't on stack
+		//  -1 if vertex is on stack
+		//  n > -1 if vertex is part of a SCC, where n is the root of the SCC.
+
+		stack <int> L;
 		int curr_d;
+		
 		// TODO make above private + gets and sets?
-		vector<Vertex>
+
 		Graph(int V);
 		void add_edge(int u, int v);
 		void tarjan_visit(int u);
@@ -56,15 +47,13 @@ Graph::Graph(int V)
 
 void Graph::add_edge(int u, int v) {
 	if (u > 0  && v > 0) {
-		
-		adj_list[u-1].push_back(Vertex(v-1));
+		adj_list[u-1].push_back(v-1);
 	}
 	else {
-		cout << "ERROR: u and v must be atleast 1." << endl;
+		cout << "EROOR: u and v must be atleast 1." << endl;
 	}
 }
 void Graph::tarjan_visit(int u) {
-	u_vertex = 
 	low[u] = curr_d;
 	d[u] = curr_d;
 	curr_d++;
